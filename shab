@@ -48,12 +48,16 @@ ObjPath="$Shab/obj"
 
 # Compiler
 
-Compiler="g++"
+Compiler="gcc"
 
 
 
 # Compiler
-CPP="$Compiler -fmax-errors=1 -O3 -c SOURCE_FILE -o $ObjPath/OBJECT_FILE"
+# CPP="$Compiler -fmax-errors=1 -O3 -c SOURCE_FILE -o $ObjPath/OBJECT_FILE"
+
+# Compiller line for memory leack catching with: valgrind --leak-check=full [exec_file]
+# Add following parameters: -Wall -g
+CPP="$Compiler -Wall -g -fmax-errors=1 -O3 -c SOURCE_FILE -o $ObjPath/OBJECT_FILE"
 
 
 
