@@ -49,6 +49,8 @@ ObjPath="$Shab/obj"
 # Compiler
 
 Compiler="gcc"
+Compiler="clang"
+
 
 
 
@@ -58,6 +60,7 @@ Compiler="gcc"
 # Compiller line for memory leack catching with: valgrind --leak-check=full [exec_file]
 # Add following parameters: -Wall -g
 CPP="$Compiler -Wall -g -fmax-errors=1 -O3 -c SOURCE_FILE -o $ObjPath/OBJECT_FILE"
+CPP="$Compiler -Wall -g -ferror-limit=1 -O3 -c SOURCE_FILE -o $ObjPath/OBJECT_FILE"
 
 
 
