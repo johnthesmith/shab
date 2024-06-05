@@ -49,7 +49,7 @@ ObjPath="$Shab/obj"
 # Compiler
 
 Compiler="gcc"
-Compiler="clang"
+Compiler="clang++"
 
 
 
@@ -59,8 +59,8 @@ Compiler="clang"
 
 # Compiller line for memory leack catching with: valgrind --leak-check=full [exec_file]
 # Add following parameters: -Wall -g
-CPP="$Compiler -Wall -g -fmax-errors=1 -O3 -c SOURCE_FILE -o $ObjPath/OBJECT_FILE"
-CPP="$Compiler -Wall -g -ferror-limit=1 -O3 -c SOURCE_FILE -o $ObjPath/OBJECT_FILE"
+## PREV CPP="$Compiler -Wall -g -ferror-limit=1 -O3 -c SOURCE_FILE -o $ObjPath/OBJECT_FILE"
+CPP="$Compiler -Wall -g -ferror-limit=1 -O3 -c SOURCE_FILE -o OBJECT_PATH/OBJECT_FILE"
 
 
 
@@ -162,12 +162,27 @@ function compile_file {
 
     if [[ $RebuildSource = "CHANGE" || $RebuildHeader = "CHANGE" ]]
     then
+        ObjSubPath=$2
+        [ -n "${ObjSubPath}" ] && ObjSubPath="/$ObjSubPath"
+
+        # Full object path build and make directory
+        ObjectPath=$ObjPath$ObjSubPath
+        # Create obj path
+        if [ ! -d $ObjectPath ]
+        then
+            mkdir -p $ObjectPath
+        fi
+
         FileName=`basename $1`
         Exec=${CPP/SOURCE_FILE/$1}
         ObjFile=${FileName/.cpp/.o}
+        Exec=${Exec//OBJECT_PATH/$ObjectPath}
         Exec=${Exec/OBJECT_FILE/$ObjFile}
+
         echo -e "Run compiler:"$COLOR_GREEN $Exec $COLOR_DEFAULT
+
         $Exec
+
         if [ $? -eq 0 ]
         then
             storeControlSumm $FileNameSource
@@ -183,11 +198,13 @@ function compile_file {
 
 # Compile path
 function build {
+    # Read list of files
     List=`ls $1`
 
+    # Loop for each file from the list of files
     for File in $List
     do
-        [ ! -f "$Error" ] && compile_file $File
+        [ ! -f "$Error" ] && compile_file $File $2
     done
 }
 
@@ -268,7 +285,7 @@ case $1 in
         [ ! -f "$Error" ] && header "$2"
     ;;
     "build")
-        build "$2"
+        build "$2" "$3"
     ;;
     "install")
         install "$2" "$3"
@@ -276,8 +293,9 @@ case $1 in
     "execute")
         if [ ! -f "$Error" ]
         then
+            # Replace vars in the Line
             Line=$2
-            Line=${Line/OBJECT_PATH/$ObjPath}
+            Line=${Line//OBJECT_PATH/$ObjPath}
             Line=${Line/COMPILER/$Compiler}
             echo -e "$COLOR_GOLD$Line$COLOR_DEFAULT"
             $Line
