@@ -47,10 +47,7 @@ ObjPath="$Shab/obj"
 
 
 # Compiler
-
-Compiler="gcc"
 Compiler="clang++"
-
 
 
 
