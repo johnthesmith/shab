@@ -47,7 +47,7 @@ ObjPath="$Shab/obj"
 
 
 # Compiler
-Compiler="clang++ -fsanitize=address"
+Compiler="clang++ -fsanitize=address -DTHREAD_PROTECTED"
 
 
 
