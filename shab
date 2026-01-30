@@ -47,7 +47,7 @@ ObjPath="$Shab/obj"
 
 
 # Compiler
-Compiler="clang++ -fsanitize=address -DTHREAD_PROTECTED"
+Compiler="clang++ -fsanitize=address -DTHREAD_PROTECTED -I/usr/include/GraphicsMagick"
 
 
 
